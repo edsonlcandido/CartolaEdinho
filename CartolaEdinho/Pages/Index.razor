@@ -1,0 +1,218 @@
+﻿@page "/"
+@using System.Text.Json;
+@using System.Text;
+@inject HttpClient Http
+
+<Cabecalho />
+<div class="row is-overflow-x-scroll">
+    <div class="container is-max-widescreen is-mobile">
+        @if (mercado != null)
+        {
+            <div class="card columns is-mobile">
+                <div class="column is-1 is-flex is-justify-content-center">
+                    <span class="has-text-weight-bold is-size-7 button is-static">time</span>
+                </div>
+                <div class="column columns">
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-static">jogador</span>
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByPreco)">Preço</span>
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-static">Var($)</span><br />
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMedia)">Média</span><br />
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByUltima)">Ult.</span><br />
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMinVal)">Min. p/ val.</span><br />
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByGol)">Gols</span><br />
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-static">FIN</span><br />
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-static">A</span><br />
+                    </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-static">Faltas</span><br />
+                    </div>
+                </div>
+                
+            </div>
+            
+            @foreach (var atleta in atletas)
+            {
+                @if (atleta.status_id == 7)
+                {
+                    <div class="card columns is-mobile">
+                        <div class="column is-1 is-flex is-justify-content-center">
+                            <span class="has-text-centered is-size-7">@clubes[atleta.clube_id.ToString()].abreviacao</span>
+                        </div>
+                        <div class="column columns">
+                            <div class="column">
+                                <span>@atleta.apelido</span><br />
+                                <span class="is-size-7">@posicoes[atleta.posicao_id.ToString()].nome</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7">@atleta.preco_num</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7">@atleta.variacao_num</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7">@atleta.media_num</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7">@atleta.pontos_num</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7 has-text-centered">@atleta.minimo_para_valorizar</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7 has-text-centered">@atleta.scout.G</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7 has-text-centered">@(atleta.scout.FD + atleta.scout.FT + atleta.scout.FF)</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7 has-text-centered">@atleta.scout.A</span>
+                            </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7 has-text-centered">@(atleta.scout.FS - atleta.scout.FC)</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <p>Carregando atletas...</p>
+        }
+    </div>
+</div>
+
+
+
+
+@code {
+    public Mercado mercado { get; set; }
+    public Atleta[] atletas { get; set; }
+    public Dictionary<string,Clube> clubes { get; set; }
+    public Dictionary<string,Posicao> posicoes { get; set; }
+    public Dictionary<string,Status> status { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //mercado = await Http.GetFromJsonAsync<Mercado>("/mercado_.json");        
+        mercado = await Http.GetFromJsonAsync<Mercado>("https://cors.ehtudo.app/https://api.cartola.globo.com/atletas/mercado");
+        //var mercado_destaques = await Http.GetFromJsonAsync<Mercado>("https://cors.ehtudo.app/https://api.cartola.globo.com/atletas/mercado/destaques");
+        //var partidas = await Http.GetFromJsonAsync<Partida[]>("https://cors.ehtudo.app/https://api.cartola.globo.com/partidas");
+        atletas = mercado.atletas.OrderByDescending(a => a.scout.G)
+                        .ThenByDescending(a => a.scout.FD + a.scout.FT + a.scout.FF)
+                        .ThenByDescending(a => a.scout.A)
+                        .ThenBy(a => a.minimo_para_valorizar)
+                        .ToArray();
+        clubes = mercado.clubes;
+        posicoes = mercado.posicoes;
+        status = mercado.status;
+        StateHasChanged();
+    }
+
+    void orderByPreco()
+    {
+        if (atletas[0] == atletas.OrderByDescending(a => a.preco_num).First())
+        {
+            atletas = atletas.OrderBy(a => a.preco_num).ToArray();
+
+            InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+        }
+        else
+        {
+            atletas = atletas.OrderByDescending(a => a.preco_num).ToArray();
+
+            InvokeAsync(() =>
+                    {
+                        StateHasChanged();
+                    });
+        }
+
+    }
+
+    void orderByMinVal()
+    {
+        atletas = atletas.OrderBy(a => a.minimo_para_valorizar)
+        .ToArray();
+
+        InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+    }
+
+    void orderByMedia()
+    {
+        if (atletas[0] == atletas.OrderByDescending(a => a.media_num).First())
+        {
+            atletas = atletas.OrderBy(a => a.media_num).ToArray();
+        }
+        else
+        {
+            atletas = atletas.OrderByDescending(a => a.media_num).ToArray();
+        }
+        InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+
+    }
+
+    void orderByUltima()
+    {
+        if (atletas[0] == atletas.OrderByDescending(a => a.pontos_num).First())
+        {
+            atletas = atletas.OrderBy(a => a.pontos_num).ToArray();
+        }
+        else
+        {
+            atletas = atletas.OrderByDescending(a => a.pontos_num).ToArray();
+        }
+        InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    void orderByGol()
+    {
+        atletas = atletas.OrderByDescending(a => a.scout.G)
+                        .ThenByDescending(a => a.scout.FD + a.scout.FT + a.scout.FF)
+                        .ThenByDescending(a => a.scout.A)
+                        .ThenBy(a => a.minimo_para_valorizar)
+                        .ToArray();
+
+        InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+    }
+
+
+    public class Mercado
+    {
+        public Atleta[] atletas { get; set; }
+        public Dictionary<string,Clube> clubes { get; set; }
+        public Dictionary<string,Posicao> posicoes { get; set; }
+        public Dictionary<string,Status> status { get; set; }
+    }
+}
