@@ -19,5 +19,6 @@ namespace CartolaEdinho
         public int status_id { get; set; }
         public Scout scout { get; set; }
         public GatoMestre gato_mestre { get; set; }
+        public double? edinho { get; set; }
     }
 }

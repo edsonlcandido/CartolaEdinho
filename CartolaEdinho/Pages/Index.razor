@@ -43,6 +43,9 @@
                     <div class="column is-flex is-justify-content-center">
                         <span class="has-text-weight-bold is-size-7 button is-static">Faltas</span><br />
                     </div>
+                    <div class="column is-flex is-justify-content-center">
+                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByEdinho)">Edinho</span><br />
+                    </div>
                 </div>
                 
             </div>
@@ -53,7 +56,8 @@
                 {
                     <div class="card columns is-mobile">
                         <div class="column is-1 is-flex is-justify-content-center">
-                            <span class="has-text-centered is-size-7">@clubes[atleta.clube_id.ToString()].abreviacao</span>
+                            <span class="has-text-centered is-size-7">@clubes[atleta.clube_id.ToString()].nome_fantasia<br/>
+                                @clubes[atleta.clube_id.ToString()].confronto</span>
                         </div>
                         <div class="column columns">
                             <div class="column">
@@ -87,6 +91,9 @@
                             <div class="column is-flex is-justify-content-center">
                                 <span class="is-size-7 has-text-centered">@(atleta.scout.FS - atleta.scout.FC)</span>
                             </div>
+                            <div class="column is-flex is-justify-content-center">
+                                <span class="is-size-7 has-text-centered">@(atleta.edinho = (double)Decimal.Round((decimal)atleta.media_num * (decimal)clubes[atleta.clube_id.ToString()].multiplicador, 2))</span>
+                            </div>
                         </div>
                     </div>
                 }
@@ -114,7 +121,7 @@
         //mercado = await Http.GetFromJsonAsync<Mercado>("/mercado_.json");        
         mercado = await Http.GetFromJsonAsync<Mercado>("https://cors.ehtudo.app/https://api.cartola.globo.com/atletas/mercado");
         //var mercado_destaques = await Http.GetFromJsonAsync<Mercado>("https://cors.ehtudo.app/https://api.cartola.globo.com/atletas/mercado/destaques");
-        //var partidas = await Http.GetFromJsonAsync<Partida[]>("https://cors.ehtudo.app/https://api.cartola.globo.com/partidas");
+        var partidas = await Http.GetFromJsonAsync<Partidas>("https://cors.ehtudo.app/https://api.cartola.globo.com/partidas");
         atletas = mercado.atletas.OrderByDescending(a => a.scout.G)
                         .ThenByDescending(a => a.scout.FD + a.scout.FT + a.scout.FF)
                         .ThenByDescending(a => a.scout.A)
@@ -123,6 +130,34 @@
         clubes = mercado.clubes;
         posicoes = mercado.posicoes;
         status = mercado.status;
+        
+        //for each partidas.partidas buscar clube_casa_id
+        //marcar clube.mandante = true
+        foreach (var partida in partidas.partidas)
+        {
+            string _confronto = clubes[partida.clube_casa_id.ToString()].abreviacao + " X " + clubes[partida.clube_visitante_id.ToString()].abreviacao;
+
+            clubes[partida.clube_casa_id.ToString()].mandante = true;
+            clubes[partida.clube_casa_id.ToString()].multiplicador = 1.1;
+            clubes[partida.clube_visitante_id.ToString()].multiplicador = 0.9;
+            clubes[partida.clube_casa_id.ToString()].posicao = partida.clube_casa_posicao;
+            clubes[partida.clube_visitante_id.ToString()].posicao = partida.clube_visitante_posicao;
+            if (partida.clube_casa_posicao < partida.clube_visitante_posicao)
+            {
+                clubes[partida.clube_casa_id.ToString()].melhor = true;
+                clubes[partida.clube_casa_id.ToString()].multiplicador *= 1.1;
+                clubes[partida.clube_visitante_id.ToString()].multiplicador *= 0.9;
+            }
+            else
+            {
+                clubes[partida.clube_visitante_id.ToString()].melhor = true;
+                clubes[partida.clube_visitante_id.ToString()].multiplicador *= 1.1;
+                clubes[partida.clube_casa_id.ToString()].multiplicador *= 0.9;
+            }
+
+            clubes[partida.clube_casa_id.ToString()].confronto = _confronto;
+            clubes[partida.clube_visitante_id.ToString()].confronto = _confronto;
+        }
         StateHasChanged();
     }
 
@@ -207,6 +242,22 @@
                 });
     }
 
+    void orderByEdinho()
+    {
+        if (atletas[0] == atletas.OrderByDescending(a => a.edinho).First())
+        {
+            atletas = atletas.OrderBy(a => a.edinho).ToArray();
+        }
+        else
+        {
+            atletas = atletas.OrderByDescending(a => a.edinho).ToArray();
+        }
+        InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
 
     public class Mercado
     {
@@ -215,4 +266,32 @@
         public Dictionary<string,Posicao> posicoes { get; set; }
         public Dictionary<string,Status> status { get; set; }
     }
+
+    //public class partidas
+    public class Partidas
+    {
+        public Partida[] partidas { get; set; }
+        public Dictionary<string, Clube> clubes { get; set; }
+    }
+
+
+    //create a class for each object in this JSON
+    //{"aproveitamento_visitante":["v","d","d","e","d"],"aproveitamento_mandante":["e","e","e","d","v"],"transmissao":{"label":"","url":""},"local":"Castelão (CE)","status_transmissao_tr":"","status_cronometro_tr":"","periodo_tr":"","partida_data":"2023-06-03 16:00:00","inicio_cronometro_tr":"","placar_oficial_visitante":null,"placar_oficial_mandante":null,"partida_id":302759,"clube_visitante_posicao":16,"clube_visitante_id":265,"clube_casa_posicao":9,"clube_casa_id":356,"timestamp":1685818800,"campeonato_id":26,"valida":true}
+    public class Partida
+    {
+        public string local { get; set; }
+        public string partida_data { get; set; }
+        public int partida_id { get; set; }
+        public int clube_visitante_posicao { get; set; }
+        public int clube_visitante_id { get; set; }
+        public int clube_casa_posicao { get; set; }
+        public int clube_casa_id { get; set; }
+        public int timestamp { get; set; }
+        public int campeonato_id { get; set; }
+        public bool valida { get; set; }
+        //aproveitamento mandante e visitante
+        public string[] aproveitamento_visitante { get; set; }
+        public string[] aproveitamento_mandante { get; set; }
+    }
+
 }
