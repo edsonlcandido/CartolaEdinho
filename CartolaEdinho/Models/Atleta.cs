@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace CartolaEdinho
+namespace CartolaEdinho.Models
 {
     public class Atleta
     {

@@ -1,4 +1,4 @@
-﻿namespace CartolaEdinho
+﻿namespace CartolaEdinho.Models
 {
     public class GatoMestre
     {
