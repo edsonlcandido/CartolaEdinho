@@ -7,6 +7,7 @@
 
 <div class="row">
     <div class="container">
+        filtros por posição:
         <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(() => filterByPosicao(1))">Goleiro</span>
         <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(() => filterByPosicao(2))">Lateral</span>
         <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(() => filterByPosicao(3))">Zagueiro</span>
@@ -18,107 +19,71 @@
 <div class="row">
     <span>&ensp;</span>
 </div>
-<div class="row is-overflow-x-scroll">
-    
-    <div class="container is-max-widescreen is-mobile">
-        
+<div class="row">    
+    <div class="container table-container">
+        <table class="table">        
         @if (mercado != null)
         {
-            <div class="card columns is-mobile">
-                <div class="column is-1 is-flex is-justify-content-center">
-                    <span class="has-text-weight-bold is-size-7 button is-static">time</span>
-                </div>
-                <div class="column columns">
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-static">jogador</span>
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByPreco)">Preço</span>
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-static">Var($)</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMedia)">Média</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByUltima)">Ult.</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMinVal)">Min. p/ val.</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByGol)">Gols</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-static">FIN</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-static">A</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-static">Faltas</span><br />
-                    </div>
-                    <div class="column is-flex is-justify-content-center">
-                        <span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByEdinho)">Edinho</span><br />
-                    </div>
-                </div>
-                
-            </div>
-            
+            <thead>
+                <tr>
+                        <th><span class="has-text-weight-bold is-size-7 button is-static">time / partida</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-static">jogador</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByPreco)">Preço</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-static">Var($)</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMedia)">Média</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByUltima)">Ult.</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMinVal)">Min. p/ val.</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByGol)">Gols</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-static">FIN</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-static">A</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-static">Faltas</span></th>
+                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByEdinho)">Edinho</span></th>
+                </tr>
+            </thead>
+            <tbody>
             @foreach (var atleta in atletas)
             {
                 @if (atleta.status_id == 7)
                 {
-                    <div class="card columns is-mobile">
-                        <div class="column is-1 is-flex is-justify-content-center">
-                            <span class="has-text-centered is-size-7">@clubes[atleta.clube_id.ToString()].nome_fantasia<br/>
-                                @clubes[atleta.clube_id.ToString()].confronto</span>
-                        </div>
-                        <div class="column columns">
-                            <div class="column">
-                                <span>@atleta.apelido</span><br />
-                                <span class="is-size-7">@posicoes[atleta.posicao_id.ToString()].nome</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7">@atleta.preco_num</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7">@atleta.variacao_num</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7">@atleta.media_num</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7">@atleta.pontos_num</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7 has-text-centered">@atleta.minimo_para_valorizar</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7 has-text-centered">@atleta.scout.G</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7 has-text-centered">@(atleta.scout.FD + atleta.scout.FT + atleta.scout.FF)</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7 has-text-centered">@atleta.scout.A</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7 has-text-centered">@(atleta.scout.FS - atleta.scout.FC)</span>
-                            </div>
-                            <div class="column is-flex is-justify-content-center">
-                                <span class="is-size-7 has-text-centered">@(atleta.edinho = (double)Decimal.Round((decimal)atleta.media_num * (decimal)clubes[atleta.clube_id.ToString()].multiplicador, 2))</span>
-                            </div>
-                        </div>
-                    </div>
+                    <tr>
+                                <td>
+                                    <span class="has-text-centered is-size-7">@clubes[atleta.clube_id.ToString()].nome_fantasia<br/>
+                                    @clubes[atleta.clube_id.ToString()].confronto</span>
+                                </td>
+                                <td>
+                                    <span>@atleta.apelido</span><br />
+                                    <span class="is-size-7">@posicoes[atleta.posicao_id.ToString()].nome</span>
+                                </td>                            
+                            
+                                <td><span class="is-size-7">@atleta.preco_num</span></td>
+                            
+                                <td><span class="is-size-7">@atleta.variacao_num</span></td>
+                            
+                                <td><span class="is-size-7">@atleta.media_num</span></td>
+                            
+                                <td><span class="is-size-7">@atleta.pontos_num</span></td>
+                            
+                                <td><span class="is-size-7 has-text-centered">@atleta.minimo_para_valorizar</span></td>
+                            
+                                <td><span class="is-size-7 has-text-centered">@atleta.scout.G</span></td>
+                            
+                                <td><span class="is-size-7 has-text-centered">@(atleta.scout.FD + atleta.scout.FT + atleta.scout.FF)</span></td>
+                            
+                                <td><span class="is-size-7 has-text-centered">@atleta.scout.A</span></td>
+                            
+                                <td><span class="is-size-7 has-text-centered">@(atleta.scout.FS - atleta.scout.FC)</span></td>
+                            
+                                <td><span class="is-size-7 has-text-centered">@(atleta.edinho = (double)Decimal.Round((decimal)atleta.media_num * (decimal)clubes[atleta.clube_id.ToString()].multiplicador, 2))</span></td>
+                            </tr>
                 }
             }
+            </tbody>
         }
         else
         {
             <p>Carregando atletas...</p>
         }
+        </table>
     </div>
 </div>
 
