@@ -26,18 +26,18 @@
         {
             <thead>
                 <tr>
-                        <th><span class="has-text-weight-bold is-size-7 button is-static">time / partida</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-static">jogador</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByPreco)">Preço</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-static">Var($)</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMedia)">Média</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByUltima)">Ult.</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMinVal)">Min. p/ val.</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByGol)">Gols</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-static">FIN</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-static">A</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-static">Faltas</span></th>
-                        <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByEdinho)">Edinho</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-static">time / partida</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-static">jogador</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByPreco)">Preço</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-static">Var($)</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMedia)">Média</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByUltima)">Ult.</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByMinVal)">Min. p/ val.</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByGol)">Gols</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-static">FIN</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-static">A</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-static">Faltas</span></th>
+                    <th><span class="has-text-weight-bold is-size-7 button is-small" @onclick="(orderByEdinho)">Edinho</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -46,35 +46,25 @@
                 @if (atleta.status_id == 7)
                 {
                     <tr>
-                                <td>
-                                    <span class="has-text-centered is-size-7">@clubes[atleta.clube_id.ToString()].nome_fantasia<br/>
-                                    @clubes[atleta.clube_id.ToString()].confronto</span>
-                                </td>
-                                <td>
-                                    <span>@atleta.apelido</span><br />
-                                    <span class="is-size-7">@posicoes[atleta.posicao_id.ToString()].nome</span>
-                                </td>                            
-                            
-                                <td><span class="is-size-7">@atleta.preco_num</span></td>
-                            
-                                <td><span class="is-size-7">@atleta.variacao_num</span></td>
-                            
-                                <td><span class="is-size-7">@atleta.media_num</span></td>
-                            
-                                <td><span class="is-size-7">@atleta.pontos_num</span></td>
-                            
-                                <td><span class="is-size-7 has-text-centered">@atleta.minimo_para_valorizar</span></td>
-                            
-                                <td><span class="is-size-7 has-text-centered">@atleta.scout.G</span></td>
-                            
-                                <td><span class="is-size-7 has-text-centered">@(atleta.scout.FD + atleta.scout.FT + atleta.scout.FF)</span></td>
-                            
-                                <td><span class="is-size-7 has-text-centered">@atleta.scout.A</span></td>
-                            
-                                <td><span class="is-size-7 has-text-centered">@(atleta.scout.FS - atleta.scout.FC)</span></td>
-                            
-                                <td><span class="is-size-7 has-text-centered">@(atleta.edinho = (double)Decimal.Round((decimal)atleta.media_num * (decimal)clubes[atleta.clube_id.ToString()].multiplicador, 2))</span></td>
-                            </tr>
+                        <td>
+                            <span class="has-text-centered is-size-7">@clubes[atleta.clube_id.ToString()].nome_fantasia<br/>
+                            @clubes[atleta.clube_id.ToString()].confronto</span>
+                        </td>
+                        <td>
+                            <span>@atleta.apelido</span><br />
+                            <span class="is-size-7">@posicoes[atleta.posicao_id.ToString()].nome</span>
+                        </td>
+                        <td><span class="is-size-7">@atleta.preco_num</span></td>
+                        <td><span class="is-size-7">@atleta.variacao_num</span></td>
+                        <td><span class="is-size-7">@atleta.media_num</span></td>
+                        <td><span class="is-size-7">@atleta.pontos_num</span></td>
+                        <td><span class="is-size-7 has-text-centered">@atleta.minimo_para_valorizar</span></td>
+                        <td><span class="is-size-7 has-text-centered">@atleta.scout.G</span></td>
+                        <td><span class="is-size-7 has-text-centered">@(atleta.scout.FD + atleta.scout.FT + atleta.scout.FF)</span></td>
+                        <td><span class="is-size-7 has-text-centered">@atleta.scout.A</span></td>
+                        <td><span class="is-size-7 has-text-centered">@(atleta.scout.FS - atleta.scout.FC)</span></td>
+                        <td><span class="is-size-7 has-text-centered">@(atleta.edinho = (double)Decimal.Round((decimal)atleta.media_num * (decimal)clubes[atleta.clube_id.ToString()].multiplicador, 2))</span></td>
+                    </tr>
                 }
             }
             </tbody>
