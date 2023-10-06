@@ -5,6 +5,13 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CartolaEdinho", "CartolaEdinho\CartolaEdinho.csproj", "{375487A8-6DE2-4C28-A1A3-878764313F59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{4D72E4BD-080F-48AE-BF43-D38D66E1F5FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{375487A8-6DE2-4C28-A1A3-878764313F59} = {375487A8-6DE2-4C28-A1A3-878764313F59}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{57B313C6-8428-413E-85B3-149B5F29B55D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +22,14 @@ Global
 		{375487A8-6DE2-4C28-A1A3-878764313F59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{375487A8-6DE2-4C28-A1A3-878764313F59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{375487A8-6DE2-4C28-A1A3-878764313F59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D72E4BD-080F-48AE-BF43-D38D66E1F5FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D72E4BD-080F-48AE-BF43-D38D66E1F5FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D72E4BD-080F-48AE-BF43-D38D66E1F5FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D72E4BD-080F-48AE-BF43-D38D66E1F5FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57B313C6-8428-413E-85B3-149B5F29B55D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57B313C6-8428-413E-85B3-149B5F29B55D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57B313C6-8428-413E-85B3-149B5F29B55D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57B313C6-8428-413E-85B3-149B5F29B55D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
